@@ -52,6 +52,30 @@ namespace Artmann.Terminal.Tests
         }
 
         [Test]
+        public void Max_Suggestions_Caps_The_List()
+        {
+            var presenter = new ConsolePresenter(_console, 1);
+
+            presenter.OnInputChanged("gi", 2);
+
+            Assert.That(presenter.Suggestions.Select(s => s.Name), Is.EqualTo(new[] { "gift" }));
+        }
+
+        [Test]
+        public void Large_Cap_Shows_More_Than_Eight()
+        {
+            for (var i = 0; i < 12; i++)
+            {
+                _console.Register($"item-{i:00}", "x", _ => { });
+            }
+
+            var presenter = new ConsolePresenter(_console, int.MaxValue);
+            presenter.OnInputChanged("item", 4);
+
+            Assert.That(presenter.Suggestions.Count, Is.GreaterThan(8));
+        }
+
+        [Test]
         public void Typing_After_Space_Shows_Argument_Suggestions()
         {
             Type("give ");

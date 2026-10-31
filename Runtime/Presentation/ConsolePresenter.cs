@@ -10,8 +10,7 @@ namespace Artmann.Terminal
     // draws the state when the events fire.
     public class ConsolePresenter
     {
-        private const int MaxSuggestions = 8;
-
+        private readonly int _maxSuggestions;
         private readonly CommandConsole _console;
         private readonly CommandArgumentResolver _argumentResolver;
         private readonly HistoryFilter _historyFilter = new();
@@ -42,9 +41,11 @@ namespace Artmann.Terminal
         // The selected suggestion or the ghost completion changed.
         public event Action SelectionChanged;
 
-        public ConsolePresenter(CommandConsole console)
+        // maxSuggestions caps the suggestion list. Pass int.MaxValue for no cap.
+        public ConsolePresenter(CommandConsole console, int maxSuggestions = 8)
         {
             _console = console;
+            _maxSuggestions = maxSuggestions;
             _argumentResolver = new CommandArgumentResolver(console);
         }
 
@@ -402,7 +403,7 @@ namespace Artmann.Terminal
                 : _console.GetSuggestions(trimmed);
 
             _suggestions.Clear();
-            _suggestions.AddRange(matches.Take(MaxSuggestions));
+            _suggestions.AddRange(matches.Take(_maxSuggestions));
             if (_suggestions.Count == 0)
             {
                 HideSuggestions();
