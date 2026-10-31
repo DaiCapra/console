@@ -1,0 +1,7 @@
+{
+  "name": "com.artmann.console",
+  "version": "1.0.0",
+  "displayName": "Console",
+  "description": "Engine-agnostic command console: commands, history, suggestions and an input presenter.",
+  "unity": "2021.3"
+}
